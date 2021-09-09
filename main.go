@@ -21,7 +21,10 @@ func main() {
 	flag.Parse()
 
 	if csvFile != "" {
-		//load csv file
+		err := loadCSV(csvFile) //Update to return []Bills
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	if loadServer {

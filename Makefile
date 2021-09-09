@@ -14,3 +14,7 @@ fmt:
 .PHONY:lint
 lint:
 	golangci-lint run ./...
+
+.PHONY:test
+test:
+	go run . --csv=test_data/test_01.html
