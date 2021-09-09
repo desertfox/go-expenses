@@ -25,9 +25,10 @@ func loadCSV(csvFile string) error {
 		panic(err)
 	}
 
-	r := csv.NewReader(bytes.NewReader(dataBytes))
 	line := 0
 	dateFormat := "02/01/2006"
+
+	r := csv.NewReader(bytes.NewReader(dataBytes))
 	for {
 		record, err := r.Read()
 		if err == io.EOF {
@@ -43,7 +44,6 @@ func loadCSV(csvFile string) error {
 		}
 
 		var amount int
-
 		if record[3] != "" {
 			decimal, err := strconv.ParseFloat(record[3], 32)
 			if err != nil {
@@ -52,7 +52,7 @@ func loadCSV(csvFile string) error {
 			amount = int(decimal) * 100
 		}
 
-		if record[4] != "" {
+		if record[4] != "0" {
 			decimal, err := strconv.ParseFloat(record[4], 32)
 			if err != nil {
 				return err
