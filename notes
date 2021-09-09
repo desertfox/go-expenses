@@ -1,0 +1,15 @@
+Bill:
+-frequency
+-amount
+-name
+-category
+-dueOn
+-paidOn
+
+Breakdowns:
+Time:
+-Bill(s) < $date > 
+
+Totals:
+Order of Bills by Largest/Smallest
+Most common Bill
