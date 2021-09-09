@@ -1,23 +1,30 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"flag"
+)
+
+var (
+	defaultPort string
+	csvFile     string
+	loadServer  bool
 )
 
 func init() {
-	http.HandleFunc("/", landing)
+	flag.BoolVar(&loadServer, "server", false, "Starts up gBill web interface")
+	flag.StringVar(&defaultPort, "p", "8080", "Port for gBill web interface")
+
+	flag.StringVar(&csvFile, "csv", "", "CSV file to load into gBill")
 }
 
 func main() {
-	fmt.Printf("Starting server at port 8080\n")
+	flag.Parse()
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal(err)
+	if csvFile != "" {
+		//load csv file
 	}
-}
 
-func landing(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Landing")
+	if loadServer {
+		startServer(defaultPort)
+	}
 }
