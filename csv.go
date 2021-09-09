@@ -7,13 +7,11 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strconv"
-	"time"
 
 	gbill "github.com/go-expenses/pkg"
 )
 
-func loadCSV(csvFile string) error {
+func loadCSV(csvFile string, wallet *gbill.Wallet) error {
 	log.Printf("loadCSV: %v", csvFile)
 	if _, err := os.Stat(csvFile); err != nil {
 		log.Printf("CSV file does not exist")
@@ -26,8 +24,6 @@ func loadCSV(csvFile string) error {
 	}
 
 	line := 0
-	dateFormat := "02/01/2006"
-
 	r := csv.NewReader(bytes.NewReader(dataBytes))
 	for {
 		record, err := r.Read()
@@ -43,32 +39,13 @@ func loadCSV(csvFile string) error {
 			continue
 		}
 
-		var amount int
-		if record[3] != "" {
-			decimal, err := strconv.ParseFloat(record[3], 32)
-			if err != nil {
-				return err
-			}
-			amount = int(decimal) * 100
+		bill, err := gbill.NewBill(record)
+		if err != nil {
+			return err
 		}
-
-		if record[4] != "0" {
-			decimal, err := strconv.ParseFloat(record[4], 32)
-			if err != nil {
-				return err
-			}
-			amount = int(decimal * 100)
-		}
-
-		paidOn, _ := time.Parse(dateFormat, record[0])
-
-		bill := &gbill.Bill{
-			Name:   record[2],
-			Amount: amount,
-			PaidOn: paidOn,
-		}
-
 		log.Printf("%#v", bill)
+
+		wallet.AddBuild(bill)
 	}
 
 	return nil

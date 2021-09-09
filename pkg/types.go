@@ -11,6 +11,6 @@ type Bill struct {
 	PaidOn    time.Time
 }
 
-type Bills struct {
-	Bills []Bill
+type Wallet struct {
+	Bills []*Bill
 }

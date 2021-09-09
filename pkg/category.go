@@ -1,5 +1,5 @@
 package gbill
 
-func (bs *Bills) Category(billsToReturn int) {
+func Category(billsToReturn int) {
 
 }

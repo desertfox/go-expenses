@@ -2,6 +2,9 @@ package main
 
 import (
 	"flag"
+	"log"
+
+	gbill "github.com/go-expenses/pkg"
 )
 
 var (
@@ -20,12 +23,16 @@ func init() {
 func main() {
 	flag.Parse()
 
+	w := gbill.NewWallet()
+
 	if csvFile != "" {
-		err := loadCSV(csvFile) //Update to return []Bills
+		err := loadCSV(csvFile, w) //Update to return []Bills
 		if err != nil {
 			panic(err)
 		}
 	}
+
+	log.Printf("%#v", w)
 
 	if loadServer {
 		startServer(defaultPort)

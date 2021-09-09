@@ -1,9 +1,9 @@
 package gbill
 
-func (bs *Bills) TotalPaid() {
+func TotalPaid() {
 
 }
 
-func (bs *Bills) TotalOwed() {
+func TotalOwed() {
 
 }
