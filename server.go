@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-expenses/pkg/server"
+	api "github.com/go-expenses/pkg/server"
 )
 
 func startServer(defaultPort string) {

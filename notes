@@ -13,3 +13,35 @@ Time:
 Totals:
 Order of Bills by Largest/Smallest
 Most common Bill
+
+
+Idea:
+An app that will take in a csv from bank of transactions + or - over a given period of time
+and allow common sorting and grouping mechanics and to display those permutations of the data
+
+outputs:
+web/html/react?
+stdout
+database/sqllite
+
+inputs:
+csv:
+-web form
+-web cli param
+-cli
+-database/sqllite
+
+filters:
+-chronological 
+-highest single
+-highest type
+-highest category
+-lowest ""
+
+filters can be applied two ways
+via cli
+or via webrequest
+
+persistence:
+--option to save records to a Storage interface
+--option to load Storage interface

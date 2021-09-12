@@ -1,11 +1,60 @@
 package gbill
 
-func NewWallet() *Wallet {
-	return &Wallet{
-		Bills: []*Bill{},
-	}
+import "fmt"
+
+type Wallet struct {
+	Bills   []*Bill
+	Filters []BillFilter
+	Output  Printer
 }
 
-func (w *Wallet) AddBuild(b *Bill) {
-	w.Bills = append(w.Bills, b)
+type BillFilter interface {
+	CalculateBill([]*Bill) []string
+}
+
+type Printer interface {
+	PrintF(string, string)
+}
+
+func (w *Wallet) LoadBills(csvFile string) {
+	bills, err := loadBillsFromCSV(csvFile)
+	if err != nil {
+		panic(err)
+	}
+	w.Bills = bills
+}
+
+func (w *Wallet) LoadFilters(filterArgs []string) {
+	filters := NewFiltersFromArgs(filterArgs)
+
+	w.Filters = NewBillFilters(filters)
+}
+
+func NewBillFilters(filters []Filter) []BillFilter {
+	var billFilters []BillFilter
+
+	for _, f := range filters {
+		if f.Name == "top_by_category" {
+			billFilters = append(billFilters, NewTopByCategory(f))
+		}
+	}
+
+	return billFilters
+}
+
+func (w *Wallet) LoadOutput() {
+	//w.Output = o
+}
+
+func (w *Wallet) FlashCash() {
+	lines := []string{}
+	for _, bf := range w.Filters {
+		newLines := bf.CalculateBill(w.Bills)
+		lines = append(lines, newLines...)
+	}
+
+	for _, line := range lines {
+		//w.Output.PrintF("%v", line)
+		fmt.Printf("%v", line)
+	}
 }
