@@ -17,4 +17,4 @@ lint:
 
 .PHONY:test
 test:
-	go run . --csv=test_data/test_01.html
+	go run . --csv=test_data/test_01.csv --filter=top_by_category

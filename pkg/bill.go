@@ -21,7 +21,6 @@ type Bill struct {
 var dateFormat = "02/01/2006"
 
 func loadBillsFromCSV(csvFile string) ([]*Bill, error) {
-	log.Printf("loadCSV: %v", csvFile)
 	if _, err := os.Stat(csvFile); err != nil {
 		log.Printf("CSV file does not exist")
 		return nil, err
@@ -42,7 +41,7 @@ func loadBillsFromCSV(csvFile string) ([]*Bill, error) {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 		line++
 

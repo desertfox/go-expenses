@@ -2,7 +2,6 @@ package gbill
 
 import (
 	"bytes"
-	"fmt"
 	"text/template"
 )
 
@@ -17,7 +16,6 @@ func newCategoryTotal(c string) *CategoryTotal {
 }
 
 func (ct *CategoryTotal) add(a int) {
-	fmt.Printf("%#v, %#v\n", ct, a)
 	ct.Total = ct.Total + a
 }
 

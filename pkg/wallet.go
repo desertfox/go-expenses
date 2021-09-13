@@ -16,6 +16,16 @@ type Printer interface {
 	PrintF(string, string)
 }
 
+func (w *Wallet) Go(csvFile string, filterArgs []string) {
+	w.LoadBills(csvFile)
+
+	w.LoadFilters(filterArgs)
+
+	w.LoadOutput()
+
+	w.FlashCash()
+}
+
 func (w *Wallet) LoadBills(csvFile string) {
 	bills, err := loadBillsFromCSV(csvFile)
 	if err != nil {
@@ -34,8 +44,13 @@ func NewBillFilters(filters []Filter) []BillFilter {
 	var billFilters []BillFilter
 
 	for _, f := range filters {
-		if f.Name == "top_by_category" {
+		switch name := f.Name; name {
+		case "top_by_category":
 			billFilters = append(billFilters, NewTopByCategory(f))
+		case "highest_paid":
+			billFilters = append(billFilters, NewHighestPaid(f))
+		case "lowest_paid":
+			billFilters = append(billFilters, NewLowestPaid(f))
 		}
 	}
 
@@ -55,6 +70,6 @@ func (w *Wallet) FlashCash() {
 
 	for _, line := range lines {
 		//w.Output.PrintF("%v", line)
-		fmt.Printf("%v", line)
+		fmt.Printf("%v\n", line)
 	}
 }
