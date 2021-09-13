@@ -21,7 +21,7 @@ func (lp *LowestPaid) CalculateBill(bills []*Bill) []string {
 		}
 	}
 
-	const format = `{{ .Name }}:{{ .PaidOn }}:{{ .Category }}:{{ .Amount }}`
+	const format = `LOWEST_PAID:{{ .Name }}:{{ .PaidOn }}:{{ .Category }}:{{ .Amount }}`
 	t := template.Must(template.New("line").Parse(format))
 
 	buf := bytes.NewBufferString("")

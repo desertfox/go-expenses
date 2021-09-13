@@ -21,7 +21,7 @@ func (hp *HighestPaid) CalculateBill(bills []*Bill) []string {
 		}
 	}
 
-	const format = `{{ .Name }}:{{ .PaidOn }}:{{ .Category }}:{{ .Amount }}`
+	const format = `HIGEST_PAID:{{ .Name }}:{{ .PaidOn }}:{{ .Category }}:{{ .Amount }}`
 	t := template.Must(template.New("line").Parse(format))
 
 	buf := bytes.NewBufferString("")

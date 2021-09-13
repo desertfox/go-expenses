@@ -43,7 +43,7 @@ func (tbc *TopByCategory) CalculateBill(bills []*Bill) []string {
 		(*cts[bill.Category]).addCount()
 	}
 
-	const format = `{{ .Category }}:{{ .Count }}:{{ .Total }}`
+	const format = `TOP_BY_CATEGORY:{{ .Category }}:{{ .Count }}:{{ .Total }}`
 	t := template.Must(template.New("line").Parse(format))
 	//Sort by options
 	lines := make([]string, len(cts))
