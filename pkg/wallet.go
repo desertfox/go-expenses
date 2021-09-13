@@ -1,32 +1,30 @@
 package gbill
 
-import "fmt"
+import (
+	"io"
+)
 
 type Wallet struct {
 	Bills   []*Bill
 	Filters []BillFilter
-	Output  Printer
+	Output  io.Writer
 }
 
 type BillFilter interface {
 	CalculateBill([]*Bill) []string
 }
 
-type Printer interface {
-	PrintF(string, string)
+func (w *Wallet) Go(csvFile string, filterArgs []string, output io.Writer) {
+	w.loadBills(csvFile)
+
+	w.loadFilters(filterArgs)
+
+	w.loadOutput(output)
+
+	w.flashCash()
 }
 
-func (w *Wallet) Go(csvFile string, filterArgs []string) {
-	w.LoadBills(csvFile)
-
-	w.LoadFilters(filterArgs)
-
-	w.LoadOutput()
-
-	w.FlashCash()
-}
-
-func (w *Wallet) LoadBills(csvFile string) {
+func (w *Wallet) loadBills(csvFile string) {
 	bills, err := loadBillsFromCSV(csvFile)
 	if err != nil {
 		panic(err)
@@ -34,7 +32,7 @@ func (w *Wallet) LoadBills(csvFile string) {
 	w.Bills = bills
 }
 
-func (w *Wallet) LoadFilters(filterArgs []string) {
+func (w *Wallet) loadFilters(filterArgs []string) {
 	filters := NewFiltersFromArgs(filterArgs)
 
 	w.Filters = NewBillFilters(filters)
@@ -57,11 +55,11 @@ func NewBillFilters(filters []Filter) []BillFilter {
 	return billFilters
 }
 
-func (w *Wallet) LoadOutput() {
-	//w.Output = o
+func (w *Wallet) loadOutput(o io.Writer) {
+	w.Output = o
 }
 
-func (w *Wallet) FlashCash() {
+func (w *Wallet) flashCash() {
 	lines := []string{}
 	for _, bf := range w.Filters {
 		newLines := bf.CalculateBill(w.Bills)
@@ -69,7 +67,6 @@ func (w *Wallet) FlashCash() {
 	}
 
 	for _, line := range lines {
-		//w.Output.PrintF("%v", line)
-		fmt.Printf("%v\n", line)
+		_, _ = w.Output.Write([]byte(line))
 	}
 }

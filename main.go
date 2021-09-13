@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"os"
 
 	gbill "github.com/go-expenses/pkg"
 )
@@ -32,5 +33,5 @@ func main() {
 
 	wallet := &gbill.Wallet{}
 
-	wallet.Go(csvFile, filterargs)
+	wallet.Go(csvFile, filterargs, os.Stdout)
 }
