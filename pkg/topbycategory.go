@@ -23,12 +23,10 @@ func (ct *CategoryTotal) addCount() {
 	ct.Count++
 }
 
-type TopByCategory struct {
-	Filter
-}
+type TopByCategory Filter
 
-func NewTopByCategory(f Filter) BillFilter {
-	return &TopByCategory{f}
+func NewTopByCategory(options []string) BillFilter {
+	return &TopByCategory{"TopByCategory", options}
 }
 
 func (tbc *TopByCategory) CalculateBill(bills []*Bill) []string {

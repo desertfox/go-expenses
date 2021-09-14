@@ -20,7 +20,7 @@ type Bill struct {
 
 var dateFormat = "02/01/2006"
 
-func loadBillsFromCSV(csvFile string) ([]*Bill, error) {
+func LoadBillsFromCSV(csvFile string) ([]*Bill, error) {
 	if _, err := os.Stat(csvFile); err != nil {
 		log.Printf("CSV file does not exist")
 		return nil, err

@@ -5,12 +5,10 @@ import (
 	"text/template"
 )
 
-type LowestPaid struct {
-	Filter
-}
+type LowestPaid Filter
 
-func NewLowestPaid(f Filter) BillFilter {
-	return &LowestPaid{f}
+func NewLowestPaid(options []string) BillFilter {
+	return &LowestPaid{"LowestPaid", options}
 }
 
 func (lp *LowestPaid) CalculateBill(bills []*Bill) []string {

@@ -5,12 +5,10 @@ import (
 	"text/template"
 )
 
-type HighestPaid struct {
-	Filter
-}
+type HighestPaid Filter
 
-func NewHighestPaid(f Filter) BillFilter {
-	return &HighestPaid{f}
+func NewHighestPaid(options []string) BillFilter {
+	return &HighestPaid{"HighestPaid", options}
 }
 
 func (hp *HighestPaid) CalculateBill(bills []*Bill) []string {

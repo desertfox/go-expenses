@@ -7,31 +7,59 @@ import (
 	gbill "github.com/go-expenses/pkg"
 )
 
-type filterArgs []string
+type flagArray []string
 
 var (
 	csvFile    string
-	filterargs filterArgs
+	filterArgs flagArray
 )
 
-func (i *filterArgs) String() string {
+func (i *flagArray) String() string {
 	return ""
 }
 
-func (i *filterArgs) Set(arg string) error {
+func (i *flagArray) Set(arg string) error {
 	*i = append(*i, arg)
 	return nil
 }
 
 func init() {
 	flag.StringVar(&csvFile, "csv", "", "CSV file to load into gBill")
-	flag.Var(&filterargs, "filter", "Filters to be applied")
+	flag.Var(&filterArgs, "filter", "Filters to be applied")
 }
 
 func main() {
 	flag.Parse()
 
-	wallet := &gbill.Wallet{}
+	bills, err := gbill.LoadBillsFromCSV(csvFile)
+	if err != nil {
+		panic(err)
+	}
 
-	wallet.Go(csvFile, filterargs, os.Stdout)
+	filters := NewBillFilters([]string{})
+
+	wallet := &gbill.Wallet{
+		Bills:   bills,
+		Filters: filters,
+		Output:  os.Stdout,
+	}
+
+	wallet.ShowMeTheMoney()
+}
+
+func NewBillFilters(options []string) []gbill.BillFilter {
+	var billFilters []gbill.BillFilter
+
+	for _, f := range filterArgs {
+		switch name := f; name {
+		case "top_by_category":
+			billFilters = append(billFilters, gbill.NewTopByCategory(options))
+		case "highest_paid":
+			billFilters = append(billFilters, gbill.NewHighestPaid(options))
+		case "lowest_paid":
+			billFilters = append(billFilters, gbill.NewLowestPaid(options))
+		}
+	}
+
+	return billFilters
 }
