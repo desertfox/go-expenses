@@ -62,16 +62,8 @@ func LoadBillsFromCSV(csvFile string) ([]*Bill, error) {
 
 func NewBill(record []string) (*Bill, error) {
 	var amount int
-	if record[3] != "" {
-		decimal, err := strconv.ParseFloat(record[3], 32)
-		if err != nil {
-			return nil, err
-		}
-		amount = int(decimal * 100)
-	}
-
-	if record[4] != "0" {
-		decimal, err := strconv.ParseFloat(record[4], 32)
+	if record[2] != "" {
+		decimal, err := strconv.ParseFloat(record[2], 32)
 		if err != nil {
 			return nil, err
 		}
@@ -81,7 +73,7 @@ func NewBill(record []string) (*Bill, error) {
 	paidOn, _ := time.Parse(dateFormat, record[0])
 
 	return &Bill{
-		Name:     record[2],
+		Name:     record[1],
 		Amount:   amount,
 		PaidOn:   paidOn,
 		Category: "Empty",

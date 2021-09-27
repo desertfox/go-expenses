@@ -1,37 +1,15 @@
 package main
 
 import (
-	"flag"
 	"os"
 
+	"github.com/go-expenses/cmd"
 	gbill "github.com/go-expenses/pkg"
 )
 
-type flagArray []string
-
-var (
-	csvFile    string
-	filterArgs flagArray
-)
-
-func (i *flagArray) String() string {
-	return ""
-}
-
-func (i *flagArray) Set(arg string) error {
-	*i = append(*i, arg)
-	return nil
-}
-
-func init() {
-	flag.StringVar(&csvFile, "csv", "", "CSV file to load into gBill")
-	flag.Var(&filterArgs, "filter", "Filters to be applied")
-}
-
 func main() {
-	flag.Parse()
 
-	bills, err := gbill.LoadBillsFromCSV(csvFile)
+	bills, err := gbill.LoadBillsFromCSV(cmd.CsvFile)
 	if err != nil {
 		panic(err)
 	}
@@ -50,7 +28,7 @@ func main() {
 func NewBillFilters(options []string) []gbill.BillFilter {
 	var billFilters []gbill.BillFilter
 
-	for _, f := range filterArgs {
+	for _, f := range cmd.FilterArgs {
 		switch name := f; name {
 		case "top_by_category":
 			billFilters = append(billFilters, gbill.NewTopByCategory(options))
